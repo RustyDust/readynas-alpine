@@ -11,7 +11,15 @@ MEDIR=`pwd`
 
 
 # Create local RSA signing key (which is IMO useless in this case, but WTHDIK)
-abuild-keygen -i -a
+if test ! -f ~/.abuild/abuild.conf; then
+  echo "No signing key found -> creating a new one"
+  abuild-keygen -i -a
+else
+  . ~/.abuild/abuild.conf
+  if [ -z "${PACKAGER_PRIVKEY}"]; then
+    echo "No signing key in ~/.abuild/abuild.conf -> crating a new one"
+    abuild-keygen -i -a
+fi
 
 # Shallow clone aports (to get the scripts)
 git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
