@@ -16,7 +16,7 @@ if test ! -f ~/.abuild/abuild.conf; then
   abuild-keygen -i -a
 else
   . ~/.abuild/abuild.conf
-  if [ -z "${PACKAGER_PRIVKEY}"]; then
+  if [ -z "${PACKAGER_PRIVKEY}" ]; then
     echo "No signing key in ~/.abuild/abuild.conf -> crating a new one"
     abuild-keygen -i -a
   else
@@ -28,7 +28,14 @@ else
 fi
 
 # Shallow clone aports (to get the scripts)
-git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
+if test -d aports/.git; then
+  cd aports
+  git pull
+  cd -
+else 
+  rm -rf aports
+  git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
+fi
 
 # We name the profile `preseed` (there's a shocker)
 export PROFILENAME=rnxpine
