@@ -11,7 +11,7 @@ MEDIR=`pwd`
 
 
 # Create local RSA signing key (which is IMO useless in this case, but WTHDIK)
-# abuild-keygen -i -a
+abuild-keygen -i -a
 
 # Shallow clone aports (to get the scripts)
 git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
