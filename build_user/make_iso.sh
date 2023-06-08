@@ -24,6 +24,7 @@ else
       echo "Key from abuild.conf doesn't exist -> creating a new one"
       abuild-keygen -i -a
     fi
+  fi
 fi
 
 # Shallow clone aports (to get the scripts)
