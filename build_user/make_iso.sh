@@ -48,7 +48,9 @@ profile_$PROFILENAME() {
         profile_standard
         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
         syslinux_serial="0 115200"
-        apks="\$apks vim util-linux curl coreutils strace nano btrfs-progs mdadm dhcp dhcpcd
+        apks="\$apks vim util-linux curl coreutils strace nano btrfs-progs mc
+                mdadm dhcp dhcpcd lvm2 nfs-utils util-linux dosfstools ntfs-3g
+                samba
                 "
         local _k _a
         for _k in \$kernel_flavors; do
@@ -98,4 +100,5 @@ sh mkimage.sh --tag v3.18-rnx \
  --outdir ${MEDIR}/iso \
  --arch x86_64 \
  --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/main \
+ --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/community \
  --profile $PROFILENAME

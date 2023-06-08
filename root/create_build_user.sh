@@ -35,7 +35,7 @@ apk upgrade
 # Packages you'll need
 # `sudo` requires the community repository!!
 apk add alpine-sdk build-base apk-tools alpine-conf busybox fakeroot 
-apk add syslinux xorriso squashfs-tools sudo grub
+apk add syslinux xorriso squashfs-tools sudo grub grub-efi
 
 # User setup
 adduser build -G abuild -D
