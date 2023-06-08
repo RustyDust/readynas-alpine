@@ -1,0 +1,15 @@
+KEYMAPOPTS="%KEYMAP% %KEYMAP%"
+HOSTNAMEOPTS="-n rnxpine"
+# PROBABLY NEEDS PARSING, NOT SURE HOW THIS IS PASSED
+# TO THE INSTALLED SYSTEM
+DNSOPTS="-d %DNSDOMAIN% %DNSSRV%"
+# NEEDS PARSING
+INTERFACEOPTS="- put original /etc/network/interfaces here -" 
+# NEEDS PARSING. We want "auto eth0, eth1" etc which aren't present
+# in NTGR's /etc/network/interfaces
+TIMEZONEOPTS="-z <content from /etc/timezone>"
+PROXYOPTS=none
+SSHDOPTS="-c openssh"
+NTPOPTS="-c chrony"
+# WE CONFIGURE THE DISKS MANUALLY
+DISKOPTS="-z --please-dont-do-anything"
