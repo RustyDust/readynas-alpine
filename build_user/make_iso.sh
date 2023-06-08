@@ -92,6 +92,8 @@ export TMPDIR=${MEDIR}/iso_tmp
 # Fetch stuff, and mold it, and augment it with preseed,
 # Put it in the ~/iso folder, for I have that need.
 cd ${MEDIR}/aports/scripts/
+export MEBUILDROOT=${MEDIR}
+
 sh mkimage.sh --tag v3.18-rnx \
  --outdir ${MEDIR}/iso \
  --arch x86_64 \
