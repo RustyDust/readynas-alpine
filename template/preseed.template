@@ -217,6 +217,8 @@ else
     INTERFACESOPTS=${MEIFACEDFLT}
   else
     INTERFACESOPTS="auto lo
+iface lo inet loopback
+
 "
     # find the configured interfaces
     RNIFS=`cat ${RNIFACES} | awk '/^iface/ { print $2 }'`

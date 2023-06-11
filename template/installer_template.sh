@@ -1,12 +1,12 @@
 # ========================================================
 #
-# To start off, boot from alpine extended (so you get ZFS)
+# To start off, boot from alpine extended
 #
 # ========================================================
 
 # This would be the preflight data one has to input:
 cat - >/root/answers <<-__EOF__
-KEYMAPOPTS="de de-nodeadkeys"
+KEYMAPOPTS="de de"
 # This would be your hostname:
 HOSTNAMEOPTS="-n rnxpine"
 # Domain name + DNS server:
