@@ -87,6 +87,7 @@ chmod +x ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 # as the main course. But I'm skimping on the loaded packages. You might
 # not want that.
 #
+echo "generating ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh"
 cat ../template/genapkovl.template > ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
 chmod +x ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
 
