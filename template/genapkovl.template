@@ -34,7 +34,7 @@ makefile root:root 0644 "$tmp"/etc/hostname <<EOF
 $HOSTNAME
 EOF
 
-makefile root:root 0644 "$mp"/etc/modules <<EOF
+makefile root:root 0644 "$tmp"/etc/modules <<EOF
 btrfs
 raid0
 raid1
@@ -66,16 +66,21 @@ mkdir -p "$tmp"/etc/local.d
 # Note the single quotes around the EOF, to avoid evaluation
 # at the time genapkovl runs.
 # =------------------------------------------------------------=
-makefile root:root 0755 "$tmp"/etc/local.d/preseed.start <<'EOF'
-#!/bin/sh
-# Fail fast, if we make it onto a live system.
-test "$(hostname)" = "rnxpine" || exit 111
-# Here would be the preseed script in earnest. One that sets
-# the hostname to something else than `preseed`, or at least
-# makes sure the /etc/local.d/preseed.start isn't carried over.
-# Lest you're a glutton for punishment.
-echo "preseeded at $(date)" >> /root/preseeded.txt
-EOF
+
+# makefile root:root 0755 "$tmp"/etc/local.d/preseed.start <<'EOF'
+# #!/bin/sh
+# # Fail fast, if we make it onto a live system.
+# test "$(hostname)" = "rnxpine" || exit 111
+# # Here would be the preseed script in earnest. One that sets
+# # the hostname to something else than `preseed`, or at least
+# # makes sure the /etc/local.d/preseed.start isn't carried over.
+# # Lest you're a glutton for punishment.
+# echo "preseeded at $(date)" >> /root/preseeded.txt
+# EOF
+
+sed -e "s/%KEYMAP%/${KEYMAP:-de}/g" ${MEBUILDROOT}/../template/preseed.template > $tmp/etc/local.d/preseed.start
+chown root:root $tmp/etc/local.d/preseed.start
+chmod 0755 $tmp/etc/local.d/preseed.start
 
 rc_add devfs sysinit
 rc_add dmesg sysinit
