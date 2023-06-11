@@ -36,8 +36,10 @@ EOF
 
 makefile root:root 0644 "$mp"/etc/modules <<EOF
 btrfs
+raid0
 raid1
 raid5
+vfat
 EOF
 
 mkdir -p "$tmp"/etc/network
@@ -96,10 +98,11 @@ rc_add local boot
 
 # we still need to add acpid, sshd, and the like and add
 # the modules we need
-rc_add aacpid default
+rc_add acpid default
 rc_add chronyd default
 rc_add crond default
 rc_add sshd default
+rc_add samba default
 
 rc_add mount-ro shutdown
 rc_add killprocs shutdown

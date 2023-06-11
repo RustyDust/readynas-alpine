@@ -3,6 +3,17 @@
 # Original script:  Michal Jirků, https://wejn.org/2022/04/alpinelinux-unattended-install/
 # Adapted for ReadyNAS migration: Stefan Rubner <stefan@whocares.de>
 
+# =========================================================
+#
+# IMPORTANT
+# 
+# This scripts exports the following environment variables that are later on used to 
+# determine the setup of the ISO image:
+#
+# KEYMAP        sets the keyboard language for the installed version
+#
+# =========================================================
+
 # Set some replacement variables
 export KEYMAP=${1:-de}
 
@@ -49,8 +60,8 @@ profile_$PROFILENAME() {
         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
         syslinux_serial="0 115200"
         apks="\$apks vim util-linux curl coreutils strace nano btrfs-progs mc
-                mdadm dhcp dhcpcd lvm2 nfs-utils util-linux dosfstools ntfs-3g
-                samba
+                mdadm dhcp dhcpcd nfs-utils util-linux dosfstools ntfs-3g
+                samba shadow bash zsh rsync net-snmp avahi
                 "
         local _k _a
         for _k in \$kernel_flavors; do
