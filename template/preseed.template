@@ -358,9 +358,7 @@ echo "${OSUUID}   /apps       btrfs   rw,relatime,space_cache,subvol=/.apps   0 
 
 # --------------------------------------------------------
 # mount the boot disk
-echo "USB drive found at ${USBDISK}"
-USBUUID=`blkid | grep "^/dev/${USBDISK}1" | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
-echo "UUID for USB drive seems to be ${USBUUID}"
+USBUUID=`blkid | grep "^/dev/${USBDISK}1" | awk '{ match($0, /UUID="[A-Fa-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
 if test -z "${USBUUID}"; then
   echo "Oops, there's no UUID for /dev/${USBDISK}1"
   exit 111
