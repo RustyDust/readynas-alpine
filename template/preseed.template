@@ -83,7 +83,7 @@ apk update
 
 # --------------------------------------------------------
 # Add required packages
-apk add avahi bash btrfs-progs coreutils curl dhcp dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba shadow util-linux zsh
+apk add avahi btrfs-progs coreutils curl dhcp dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba shadow util-linux
 
 modprobe btrfs
 modprobe raid0

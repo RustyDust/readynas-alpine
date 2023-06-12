@@ -50,7 +50,7 @@ fi
 
 GITREV=`git rev-parse --short=6 HEAD`
 # We name the profile `preseed` (there's a shocker)
-export PROFILENAME="rnxpine_${GITREV}"
+export PROFILENAME="readynas_${GITREV}"
 
 # Basic profile data -- inherits from standard, but the main thing to make
 # it work is the `apkovl=`. This is the script that configures most of the
@@ -60,9 +60,9 @@ profile_$PROFILENAME() {
         profile_standard
         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
         syslinux_serial="0 115200"
-        apks="\$apks vim util-linux curl coreutils strace nano btrfs-progs mc
+        apks="\$apks vim util-linux curl coreutils nano btrfs-progs mc
                 mdadm dhcp dhcpcd nfs-utils util-linux dosfstools ntfs-3g
-                samba shadow bash zsh rsync net-snmp avahi gawk proftpd
+                samba shadow rsync net-snmp avahi gawk proftpd
                 "
         local _k _a
         for _k in \$kernel_flavors; do
