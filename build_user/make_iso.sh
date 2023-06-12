@@ -94,6 +94,7 @@ chmod +x ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
 
 # Create output dir
 mkdir -p ${MEDIR}/iso
+rm -rf ${MEDIR}/iso/*
 
 # Make sure we're NOT working in RAM since we may be
 # running on a RAM-challenged system. If you have plenty
