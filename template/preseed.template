@@ -452,8 +452,8 @@ if test -f /mnt/boot/syslinux.cfg; then
 fi
 
 # --------------------------------------------------------
-# remove quit from kernel command line
-sed -i -e "s/quiet/video=1920x1080@60/g" /mnt/boot/extlinux.conf
+# remove quit from kernel command line, try to force video
+sed -i -e "s/quiet/video=1280x1024@60/g" /mnt/boot/extlinux.conf
 
 # =========================================================
 # 
