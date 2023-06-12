@@ -283,34 +283,38 @@ __EOF__
 # =========================================================
 
 # --------------------------------------------------------
+# disable our preseed script
+rc-update del local boot
+
+# --------------------------------------------------------
 # source the ReadyNAS setup
 . /mnt/rnos_bak/etc/default/services
 
-if test ${NFS} -eq 1; then
+if test "${NFS}" = "1"; then
   rc-update add nfs || true
 else
   rc-update del nfs || true
 fi
 
-if test ${PROFTPD} -eq 1; then
+if test "${PROFTPD}" = "1"; then
   rc-update add proftpd || true
 else
   rc-update del proftpd || true
 fi
 
-if test ${SAMBA} -eq 1; then
+if test "${SAMBA}" = "1"; then
   rc-update add samba || true
 else
   rc-update del samba || true
 fi
 
-if test ${RSYNC} -eq 1; then
+if test "${RSYNC}" = "1"; then
   rc-update add rsyncd || true
 else
   rc-update del rsyncd || true
 fi
 
-if test ${SNMPD} = 1; then
+if test "${SNMPD}" = "1"; then
   rc-update add snmpd || true
 else
   rc-update del snmpd || true
@@ -333,7 +337,7 @@ setup-disk /mnt
 # --------------------------------------------------------
 # Fix root= in /boot/extlinux.conf to use UUID instead
 # - run blkid to get UUID of $OSVOL
-OSUUID=`blkid | grep "\"${OSVOL}\""` | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+OSUUID=`blkid | grep "\"${OSVOL}\"" | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
 echo "Found $OSUUID for new root partition"
 sed -i -e "s/root=[A-Za-z0-9/=\":-]\+/root=$OSUUID/g" /mnt/boot/extlinux.conf
 sed -i -e "s/ quiet / /g" /mnt/boot/extlinux.conf
@@ -341,19 +345,23 @@ sed -i -e "s/ quiet / /g" /mnt/boot/extlinux.conf
 # --------------------------------------------------------
 # Fix /etc/fstab for new system
 echo "${OSUUID}   /           btrfs   rw,relatime,space_cache,subvol=/        0 1" >  /mnt/etc/fstab
-echo "${OSUUID}   /data       btrfs   rw,relatime,space_cache,subvol=/        0 2" >>  /mnt/etc/fstab
+echo "${OSUUID}   /data       btrfs   rw,relatime,space_cache,subvol=/        0 2" >> /mnt/etc/fstab
 echo "${OSUUID}   /apps       btrfs   rw,relatime,space_cache,subvol=/.apps   0 2" >> /mnt/etc/fstab
 
 # --------------------------------------------------------
+# mount the boot disk
+echo "${USBDISK}  /boot       vfat    rw,norelatime,noatime                   0 2" >> /mnt/etc/fstab
+
+# --------------------------------------------------------
 # Find other UUIDs
-ROOTUUID=`blkid | grep "\"${ROOTFS}\""` | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+ROOTUUID=`blkid | grep "\"${ROOTFS}\"" | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
 if test ! -z "${ROOTUUID}"; then
-  echo "${ROOTUUID} /rnos_bak   btrfs   rw,relatime,space_cache,subvol=/        0 2" >>  /mnt/etc/fstab
+  echo "${ROOTUUID}   /rnos_bak   btrfs   rw,relatime,space_cache,subvol=/        0 2" >>  /mnt/etc/fstab
 fi
 
 for ADD in ${ADDMNT}; do
   SUBPATH=`echo ${ADD} | awk -F: '{ print $2 }'`
-  SUBUUID=`blkid | grep "\"${ADD}\""` | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+  SUBUUID=`blkid | grep "\"${ADD}\"" | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
   if test ! -z "${SUBUUID}"; then
     echo "${SUBUUID} /${SUBPATH}   btrfs   rw,relatime,space_cache,subvol=/${SUBPATH}        0 2" >>  /mnt/etc/fstab
   fi
@@ -384,7 +392,7 @@ sed -i -e "s/quiet//g" /mnt/boot/extlinux.conf
 # =========================================================
 
 # unmount old file systems
-mount | awk '/\/mnt/ { print $3 } | sort -r | xargs -I{} umount {}
+mount | awk '/\/mnt/ { print $3 }' | sort -r | xargs -I{} umount {}
 
 # This is the end, my friend
 # sync
