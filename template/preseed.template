@@ -342,10 +342,6 @@ __EOF__
 # =========================================================
 
 # --------------------------------------------------------
-# disable our preseed script
-rc-update del local boot
-
-# --------------------------------------------------------
 # source the ReadyNAS setup
 . /mnt/rnos_bak/etc/default/services
 
@@ -384,6 +380,9 @@ if test "${AVAHI}" = "1"; then
 else
   rc-update del avahi-daemon || true
 fi
+
+# make damn sure we run on first boot after alpine install
+rc-update add local boot
 
 # =========================================================
 # 
