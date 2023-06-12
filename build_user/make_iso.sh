@@ -48,8 +48,9 @@ else
   git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
 fi
 
+GITREV=`git rev-parse --short=6 HEAD`
 # We name the profile `preseed` (there's a shocker)
-export PROFILENAME=rnxpine
+export PROFILENAME="rnxpine-${GITREV}"
 
 # Basic profile data -- inherits from standard, but the main thing to make
 # it work is the `apkovl=`. This is the script that configures most of the
