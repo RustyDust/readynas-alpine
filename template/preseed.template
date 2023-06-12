@@ -24,8 +24,6 @@ if test -f /boot/.readynas_converted; then
         echo "User ${UNAME} doesn't exist -> creating"
         # get group name for RN user
         UGNAME=`grep ":${UGID}:" /rnos_bak/etc/group`
-        # check if userid already used
-        AUID=`
         # check whether group already exists
         GROUP=`grep ":${UGNAME}:" /etc/group`
         if test -z "${GROUP}"; then
