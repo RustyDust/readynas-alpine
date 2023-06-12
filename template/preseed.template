@@ -352,7 +352,8 @@ echo "${OSUUID}   /apps       btrfs   rw,relatime,space_cache,subvol=/.apps   0 
 
 # --------------------------------------------------------
 # mount the boot disk
-echo "/dev/${USBDISK}1  /boot       vfat    rw,norelatime,noatime                   0 2" >> /mnt/etc/fstab
+USBUUID=`blkid | grep "^/dev/${USBDISK}1" | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+echo "${USBUUID}  /boot       vfat    rw,norelatime,noatime                   0 2" >> /mnt/etc/fstab
 
 # --------------------------------------------------------
 # Find other UUIDs
@@ -385,7 +386,7 @@ fi
 
 # --------------------------------------------------------
 # remove quit from kernel command line
-sed -i -e "s/quiet//g" /mnt/boot/extlinux.conf
+sed -i -e "s/quiet/video=1920x1080@60/g" /mnt/boot/extlinux.conf
 
 # =========================================================
 # 
