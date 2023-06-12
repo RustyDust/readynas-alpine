@@ -341,6 +341,7 @@ sed -i -e "s/ quiet / /g" /mnt/boot/extlinux.conf
 # --------------------------------------------------------
 # Fix /etc/fstab for new system
 echo "${OSUUID}   /           btrfs   rw,relatime,space_cache,subvol=/        0 1" >  /mnt/etc/fstab
+echo "${OSUUID}   /data       btrfs   rw,relatime,space_cache,subvol=/        0 2" >>  /mnt/etc/fstab
 echo "${OSUUID}   /apps       btrfs   rw,relatime,space_cache,subvol=/.apps   0 2" >> /mnt/etc/fstab
 
 # --------------------------------------------------------
