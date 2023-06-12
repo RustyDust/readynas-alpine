@@ -338,8 +338,10 @@ setup-disk /mnt
 # Fix root= in /boot/extlinux.conf to use UUID instead
 # - run blkid to get UUID of $OSVOL
 OSUUID=`blkid | grep "\"${OSVOL}\"" | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
-echo "Found $OSUUID for new root partition"
-sed -i -e "s/root=[A-Za-z0-9/=\":-]\+/root=$OSUUID/g" /mnt/boot/extlinux.conf
+# kernel doesn't like quoted strings, fstab needs 'em ...
+OSTAB=`echo ${OSUUID} | sed -e 's/"//g'`
+echo "Found $OSTAB for new root partition"
+sed -i -e "s/root=[A-Za-z0-9/=\":-]\+/root=$OSTAB/g" /mnt/boot/extlinux.conf
 sed -i -e "s/ quiet / /g" /mnt/boot/extlinux.conf
 
 # --------------------------------------------------------
@@ -350,7 +352,7 @@ echo "${OSUUID}   /apps       btrfs   rw,relatime,space_cache,subvol=/.apps   0 
 
 # --------------------------------------------------------
 # mount the boot disk
-echo "${USBDISK}  /boot       vfat    rw,norelatime,noatime                   0 2" >> /mnt/etc/fstab
+echo "/dev/${USBDISK}1  /boot       vfat    rw,norelatime,noatime                   0 2" >> /mnt/etc/fstab
 
 # --------------------------------------------------------
 # Find other UUIDs
