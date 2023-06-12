@@ -62,7 +62,7 @@ profile_$PROFILENAME() {
         syslinux_serial="0 115200"
         apks="\$apks vim util-linux curl coreutils strace nano btrfs-progs mc
                 mdadm dhcp dhcpcd nfs-utils util-linux dosfstools ntfs-3g
-                samba shadow bash zsh rsync net-snmp avahi gawk
+                samba shadow bash zsh rsync net-snmp avahi gawk proftpd
                 "
         local _k _a
         for _k in \$kernel_flavors; do

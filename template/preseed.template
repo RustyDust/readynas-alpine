@@ -13,7 +13,8 @@
 if test -f /boot/.readynas_converted; then
   rc-update del local boot
   rm -f /boot/.readynas_converted
-  # rm -f /etc/local.d/preseed.start
+  rm -f /etc/local.d/preseed.start
+  rm -f /root/answers
   exit
 fi
 
@@ -24,7 +25,7 @@ apk update
 
 # --------------------------------------------------------
 # Add required packages
-apk add avahi bash btrfs-progs coreutils curl dhcp dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g rsync samba shadow util-linux zsh
+apk add avahi bash btrfs-progs coreutils curl dhcp dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba shadow util-linux zsh
 
 modprobe btrfs
 modprobe raid0
