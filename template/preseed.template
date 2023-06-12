@@ -458,8 +458,8 @@ sed -i -e "s/quiet/video=1280x1024@60/g" /mnt/boot/extlinux.conf
 # =========================================================
 
 # unmount old file systems
-mount | awk '/\/mnt/ { print $3 }' | sort -r | xargs -I{} umount {}
+# mount | awk '/\/mnt/ { print $3 }' | sort -r | xargs -I{} umount {}
 
 # This is the end, my friend
-sync
-reboot
+# sync
+# reboot
