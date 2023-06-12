@@ -8,13 +8,23 @@
 # =========================================================
 
 # --------------------------------------------------------
+# Check if we're on an already converted system
+
+if test -f /boot/.readynas_converted; then
+  rc-update del local boot
+  rm -f /boot/.readynas_converted
+  # rm -f /etc/local.d/preseed.start
+  exit
+fi
+
+# --------------------------------------------------------
 # Enable community repository
 sed -i -r 's,#(.*/v.*/community),\1,' /etc/apk/repositories
 apk update
 
 # --------------------------------------------------------
 # Add required packages
-apk add avahi bash btrfs-progs coreutils curl dhcp dhcpcd dosfstools mc mdadm nano net-snmp nfs-utils ntfs-3g rsync samba shadow util-linux zsh
+apk add avahi bash btrfs-progs coreutils curl dhcp dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g rsync samba shadow util-linux zsh
 
 modprobe btrfs
 modprobe raid0
@@ -51,9 +61,6 @@ if test -z "${DATAFS}"; then
   echo "No data volumes found -> you sure this is a ReadyNAS?"
   exit 111
 fi
-
-# echo ${ROOTFS}
-# echo ${DATAFS}
 
 # !!!
 # If we have more than one data partition, on which one do we place the
@@ -134,20 +141,16 @@ fi
 mkdir -p /mnt/boot
 mount /dev/${USBDISK}1 /mnt/boot
 
-# create a backup in /etc/readynas_boot
-mkdir -p /etc/readynas_boot
-tar cf - . -C /mnt/boot | tar -C /etc/readynas_boot -xf -
+# create a backup in /etc/rnos_bak/boot
+mkdir -p /etc/rnos_bak/boot
+tar cf - . -C /mnt/boot | tar -C /etc/rnos_bak/boot -xf -
 cd - 2>&1 /dev/null
 # make a backup copy of the original MBR
-dd if=/dev/${USBDISK} of=/etc/readynas_boot/readynas.mbr bs=446 count=1
+dd if=/dev/${USBDISK} of=/etc/rnos_bak/boot/readynas.mbr bs=446 count=1
 
-# better safe than sorry: copy stuff from rnos_bak to /etc
-# if we don't need to, we can remove that later.
-mkdir -p /etc/readynas/etc
-# ReadyNAS overrides for system utils
-tar cf - frontview -C /mnt/rnos_bak/etc | tar -C /etc/readynas/etc -xf -
-# ReadyNAS frontview binaries
-tar cf - frontview -C /mnt/rnos_bak | tar -C /etc/readynas -xf -
+# delete old stuff to make some room otherwise we may run into
+# problems on ReadyNAS systems with only 128 MB of boot storage
+rm -f /mnt/boot/*
 
 # override system configs of alpine here
 mkdir -p /etc/frontview
@@ -307,13 +310,13 @@ else
   rc-update del rsyncd || true
 fi
 
-if test ${SNMPD} -eq 1; then
+if test ${SNMPD} = 1; then
   rc-update add snmpd || true
 else
   rc-update del snmpd || true
 fi
 
-if test ${AVAHI} -eq 1; then
+if test "${AVAHI}" = "1"; then
   rc-update add avahi-daemon || true
 else
   rc-update del avahi-daemon || true
@@ -326,6 +329,61 @@ fi
 # =========================================================
 
 setup-disk /mnt
+
+# --------------------------------------------------------
+# Fix root= in /boot/extlinux.conf to use UUID instead
+# - run blkid to get UUID of $OSVOL
+OSUUID=`blkid | grep "\"${OSVOL}\""` | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+echo "Found $OSUUID for new root partition"
+sed -i -e "s/root=[A-Za-z0-9/=\":-]\+/root=$OSUUID/g" /mnt/boot/extlinux.conf
+sed -i -e "s/ quiet / /g" /mnt/boot/extlinux.conf
+
+# --------------------------------------------------------
+# Fix /etc/fstab for new system
+echo "${OSUUID}   /           btrfs   rw,relatime,space_cache,subvol=/        0 1" >  /mnt/etc/fstab
+echo "${OSUUID}   /apps       btrfs   rw,relatime,space_cache,subvol=/.apps   0 2" >> /mnt/etc/fstab
+
+# --------------------------------------------------------
+# Find other UUIDs
+ROOTUUID=`blkid | grep "\"${ROOTFS}\""` | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+if test ! -z "${ROOTUUID}"; then
+  echo "${ROOTUUID} /rnos_bak   btrfs   rw,relatime,space_cache,subvol=/        0 2" >>  /mnt/etc/fstab
+fi
+
+for ADD in ${ADDMNT}; do
+  SUBPATH=`echo ${ADD} | awk -F: '{ print $2 }'`
+  SUBUUID=`blkid | grep "\"${ADD}\""` | awk '{ match($0, /UUID="[a-f0-9-]+"/, arr); if (arr[0] != "" ) print arr[0] }'`
+  if test ! -z "${SUBUUID}"; then
+    echo "${SUBUUID} /${SUBPATH}   btrfs   rw,relatime,space_cache,subvol=/${SUBPATH}        0 2" >>  /mnt/etc/fstab
+  fi
+done
+
+echo "/dev/cdrom    /media/cdrom    iso9660 noauto,ro     0   0" >> /mnt/etc/fstab
+echo "/dev/usbdisk  /media/cdrom    vfat    noauto        0   0" >> /mnt/etc/fstab
+echo "tmpfs         /tmp            tmpfs   nosuid,nodev  0   0" >> /mnt/etc/fstab
+
+# --------------------------------------------------------
+# set flag for first boot
+touch /mnt/boot/.readynas_converted
+
+# --------------------------------------------------------
+# check for syslinux.cfg and move if present
+if test -f /mnt/boot/syslinux.cfg; then
+  mv /mnt/boot/syslinux.cfg /mnt/boot/syslinux.cfg.old
+fi
+
+# --------------------------------------------------------
+# remove quit from kernel command line
+sed -i -e "s/quiet//g" /mnt/boot/extlinux.conf
+
+# =========================================================
+# 
+# Part 5: clean up
+#
+# =========================================================
+
+# unmount old file systems
+mount | awk '/\/mnt/ { print $3 } | sort -r | xargs -I{} umount {}
 
 # This is the end, my friend
 # sync
