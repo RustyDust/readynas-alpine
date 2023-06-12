@@ -23,9 +23,9 @@ if test -f /boot/.readynas_converted; then
       if test -z "${AUSER}"; then
         echo "User ${UNAME} doesn't exist -> creating"
         # get group name for RN user
-        UGNAME=`grep ":${UGID}:" /rnos_bak/etc/group`
+        UGNAME=`grep ":${UGID}:" /rnos_bak/etc/group | awk -F: '{ print $1 }'`
         # check whether group already exists
-        GROUP=`grep ":${UGNAME}:" /etc/group`
+        GROUP=`grep "^${UGNAME}:" /etc/group`
         if test -z "${GROUP}"; then
           # nope, need to create
           echo "Group ${UGNAME} doesn't exist -> creating"
@@ -35,22 +35,20 @@ if test -f /boot/.readynas_converted; then
             # nope, so just use the UGID
             addgroup -g ${UGID} ${UGNAME}
             # and add the user
-            adduser -H ${UHOME} -s /bin/sh -G ${UGID} -D ${UNAME}
+            adduser -h ${UHOME} -s /bin/sh -G ${UGNAME} -D ${UNAME}
             # no need to change the group since we already created
             # one with a matching GUID
             find /data -user ${UID} -exec chown ${UNAME}: {} \;
           else
             # yup, so new group and chown
             addgroup ${UGNAME}
-            GID=`grep ":${UGNAME}:" /etc/group  | awk -F: '{ print $3 }'`
-            adduser -H ${UHOME} -s /bin/sh -G ${GID} -D ${UNAME}
-            find /data -group ${UGID} -exec chown :${GID} {} \;
+            adduser -h ${UHOME} -s /bin/sh -G ${UGNAME} -D ${UNAME}
+            find /data -group ${UGID} -exec chown :${UGNAME} {} \;
           fi
         else
           # get GID of existing alpine group
-          GID=`echo ${GROUP} | awk -F: '{ print $3 }'`
-          adduser -H ${UHOME} -s /bin/sh -G ${GID} -D ${UNAME}
-          find /data -group ${UGID} -exec chown :$GID {} \;
+          adduser -h ${UHOME} -s /bin/sh -G ${UGNAME} -D ${UNAME}
+          find /data -group ${UGID} -exec chown :${UGNAME} {} \;
         fi
         # group done, now for the user
         find /data -user ${UGID} -exec chown ${UNAME}: {} \;
@@ -202,12 +200,12 @@ fi
 mkdir -p /mnt/boot
 mount /dev/${USBDISK}1 /mnt/boot
 
-# create a backup in /etc/rnos_bak/boot
-mkdir -p /etc/rnos_bak/boot
-tar cf - . -C /mnt/boot | tar -C /etc/rnos_bak/boot -xf -
+# create a backup in /mnt/rnos_bak/boot
+mkdir -p /mnt/rnos_bak/boot
+tar cf - . -C /mnt/boot | tar -C /mnt/rnos_bak/boot -xf -
 cd - 2>&1 /dev/null
 # make a backup copy of the original MBR
-dd if=/dev/${USBDISK} of=/etc/rnos_bak/boot/readynas.mbr bs=446 count=1
+dd if=/dev/${USBDISK} of=/mnt/rnos_bak/boot/readynas.mbr bs=446 count=1
 
 # delete old stuff to make some room otherwise we may run into
 # problems on ReadyNAS systems with only 128 MB of boot storage
