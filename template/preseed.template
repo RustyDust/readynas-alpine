@@ -23,7 +23,7 @@ modprobe raid5
 modprobe vfat
 
 # -- assemble raid arrays
-mdadm --assemble --scan 2>&1 /dev/null
+mdadm --assemble --scan
 
 # -- check for BTRFS file systems
 # - Step1: get list of file systems
@@ -150,7 +150,7 @@ tar cf - frontview -C /mnt/rnos_bak/etc | tar -C /etc/readynas/etc -xf -
 tar cf - frontview -C /mnt/rnos_bak | tar -C /etc/readynas -xf -
 
 # override system configs of alpine here
-mkdir /etc/frontview
+mkdir -p /etc/frontview
 SVCS="proftpd rsync samba"
 for SVC in ${SVCS}; do
   tar cf - ${SVC} -C /mnt/rnos_bak/etc/frontview | tar -C /etc/frontview -xf -
@@ -177,7 +177,7 @@ tar cf - /mnt/rnos_bak/etc/exports | tar -C /etc -xf -
 
 # --------------------------------------------------------
 # let's do the easy stuff first
-MEHOST=`cat /mnt/rnos_bak/etc/hostsname``
+MEHOST=`cat /mnt/rnos_bak/etc/hostname`
 MEDOMAIN=`cat /mnt/rnos_bak/etc/resolv.conf | grep search | awk '{ print $2 }'`
 if test -z "${MEDOMAIN}"; then
   MEDOMAIN="localhost.localnet"
@@ -198,7 +198,7 @@ iface lo inet loopback
 
 "
 for IFACE in eth0 eth1; do
-    MEIFACEDFLT= "${MEIFACEDFLT}
+    MEIFACEDFLT="${MEIFACEDFLT}
 auto ${IFACE}
 iface ${IFACE} inet dhcp
 
@@ -242,8 +242,9 @@ DNSOPTS="-d ${MEDOMAIN} ${MEDNSSRV}"
 INTERFACESOPTS="${INTERFACESOPTS}"
 TIMEZONEOPTS="-z ${METIMEZONE}"
 PROXYOPTS=none
-APKREPOSOPTS="-1"
+APKREPOSOPTS="-c -1"
 SSHDOPTS="-c openssh"
+USEROPTS="-a -g \"audio video netdev\" admin"
 NTPOPTS="-c chrony"
 # since we're using setup-disk /mnt
 DISKOPTS="-z --please-dont-do-anything"
@@ -301,9 +302,9 @@ else
 fi
 
 if test ${RSYNC} -eq 1; then
-  rc-update add rsync || true
+  rc-update add rsyncd || true
 else
-  rc-update del rsync || true
+  rc-update del rsyncd || true
 fi
 
 if test ${SNMPD} -eq 1; then
