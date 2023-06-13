@@ -61,9 +61,6 @@ profile_$PROFILENAME() {
         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
         syslinux_serial="0 115200"
         # remove packages not needed for conversion
-        apks="\${apks//tiny-cloud-alpine }"
-        apks="\${apks//iw }"
-        apks="\${apks//wpa_supplicant }"
         apks="\$apks vim util-linux curl coreutils nano btrfs-progs mc
                 mdadm nfs-utils util-linux dosfstools ntfs-3g
                 samba shadow rsync net-snmp avahi gawk proftpd
@@ -76,6 +73,9 @@ profile_$PROFILENAME() {
                 done
         done
         apks="\$apks linux-firmware"
+        apks="\${apks//tiny-cloud-alpine }"
+        apks="\${apks//iw }"
+        apks="\${apks//wpa_supplicant }"
         echo "APKs baked into ISO:"
         echo "\$apks"
         hostname="rnxpine"
