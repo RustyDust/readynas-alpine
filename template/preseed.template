@@ -340,6 +340,10 @@ __EOF__
 #
 # =========================================================
 
+# set the root password
+echo "root:password" | chpasswd
+sync
+
 # --------------------------------------------------------
 # source the ReadyNAS setup
 . /mnt/rnos_bak/etc/default/services
@@ -385,9 +389,6 @@ rc-update add ssh default
 
 # make damn sure we run on first boot after alpine install
 rc-update add local boot
-
-# and set the root password
-echo "root:password" | chpasswd
 
 # =========================================================
 # 
