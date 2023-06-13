@@ -38,6 +38,9 @@ else
   fi
 fi
 
+# remove wireless-regdb 
+sed -i -e 's/wireless-regdb//g' aports/scripts/mkimg.base.sh
+
 # Shallow clone aports (to get the scripts)
 if test -d aports/.git; then
   cd aports
