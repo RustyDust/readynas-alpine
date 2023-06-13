@@ -86,7 +86,7 @@ apk update
 
 # --------------------------------------------------------
 # Add required packages
-apk add avahi btrfs-progs coreutils curl dhcp dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba shadow util-linux
+apk add avahi btrfs-progs coreutils curl dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba shadow util-linux
 
 modprobe btrfs
 modprobe raid0
@@ -308,6 +308,7 @@ TIMEZONEOPTS="-z ${METIMEZONE}"
 PROXYOPTS=none
 APKREPOSOPTS="-c -1"
 SSHDOPTS="-c openssh"
+USEROPTS="-a -g \"audio video netdev\" admin"
 NTPOPTS="-c chrony"
 # since we're using setup-disk /mnt
 DISKOPTS="-z --please-dont-do-anything"
