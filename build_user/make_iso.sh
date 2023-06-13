@@ -62,7 +62,7 @@ profile_$PROFILENAME() {
         syslinux_serial="0 115200"
         # remove packages not needed for conversion
         apks="\$apks vim util-linux curl coreutils nano btrfs-progs mc
-                mdadm nfs-utils util-linux dosfstools ntfs-3g
+                mdadm nfs-utils dosfstools ntfs-3g
                 samba shadow rsync net-snmp avahi gawk proftpd
                 "
         local _k _a
