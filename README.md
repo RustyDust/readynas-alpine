@@ -16,7 +16,10 @@ Creates an ISO image for an automated installer that replaces ReadyNAS OS with
 ## Quick Start / Usage
 
 If you want to jump right into the fry just grab the latest ISO image from [Releases](./releases),
-and burn it on an USB stick. Next, follow the procedure to boot your ReadyNAS from that stick as
+and burn it on an USB stick. I currently use [Balena Etcher](https://etcher.balena.io/#download-etcher)
+but you may prefer other methods.
+
+Next, follow the procedure to boot your ReadyNAS from that stick as
 outelined in [NETGEAR Support: How do I use the USB Recovery Tool on my ReadyNAS OS 6 storage system?](https://kb.netgear.com/29952/How-do-I-use-the-USB-Recovery-Tool-on-my-ReadyNAS-OS-6-storage-system#Desktop_ReadyNAS).
 
 If all goes well the ReadyNAS will boot from the USB stick, the converter will do its thing and when
