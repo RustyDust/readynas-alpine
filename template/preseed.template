@@ -231,7 +231,6 @@ tar cf - /mnt/rnos_bak/etc/rsyncd.conf | tar -C /etc -xf -
 # !!! PROBABLY NEEDS TWEAKING !!!
 tar cf - /mnt/rnos_bak/etc/exports | tar -C /etc -xf -
 
-
 # =========================================================
 # 
 # Part 2: create the answer file for setup-alpine
@@ -309,7 +308,6 @@ TIMEZONEOPTS="-z ${METIMEZONE}"
 PROXYOPTS=none
 APKREPOSOPTS="-c -1"
 SSHDOPTS="-c openssh"
-USEROPTS="-a -g \"audio video netdev\" admin"
 NTPOPTS="-c chrony"
 # since we're using setup-disk /mnt
 DISKOPTS="-z --please-dont-do-anything"
@@ -332,8 +330,6 @@ setup-alpine -e -f /root/answers
 cat - >/etc/issue <<-__EOF__
 
 Terminal ready on \l.
-
-$(ssh-keygen -l -v -f /etc/ssh/ssh_host_ecdsa_key.pub)
 
 __EOF__
 > /etc/motd
@@ -386,6 +382,9 @@ fi
 
 # make damn sure we run on first boot after alpine install
 rc-update add local boot
+
+# and set the root password
+echo "root:password" | chpasswd
 
 # =========================================================
 # 
