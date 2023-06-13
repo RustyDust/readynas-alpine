@@ -29,7 +29,7 @@ it's done it will finish the conversion with a reboot. You then have an converte
 - has all the previously installed apps in `/apps` (but disabled!)
 - runs all the sharing services previoulsy enabled on the ReadyNAS (samba, nfs, ftp, rsync)
 
-### Things to note:**
+### Things to note:
 
 1) **Installed apps are disabled**
   
@@ -101,9 +101,12 @@ If you want to tweak the converter you will need to roll your own ISO.
 1) check out the repo again (yeah, I know ...)
 
    `git clone https://github.com/RustyDust/rnx-alpine`
+
 1) make necessary/intended changes to 
    - `template/genapkovl.template`
    - `template/preseed.template`
+
+   **Note:** For debugging have a look at the code sections marked with `!!! HINT !!!`
 
 1) When done, run the script to generate the ISO
 

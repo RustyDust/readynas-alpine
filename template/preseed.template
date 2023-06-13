@@ -470,8 +470,12 @@ fi
 # =========================================================
 
 # unmount old file systems
+# !!! HINT !!!
+# comment to leave mounts intact for inspection
 # mount | awk '/\/mnt/ { print $3 }' | sort -r | xargs -I{} umount {}
 
 # This is the end, my friend
-# sync
+sync
+# !!! HINT !!!
+# comment to prevent automatic reboot after run
 # reboot

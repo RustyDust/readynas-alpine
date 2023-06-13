@@ -99,6 +99,8 @@ rc_add syslog boot
 
 # we want our preseed to run & have network while at it
 rc_add networking boot
+# !!! HINT !!!
+# comment to prevent automatic run of converter
 rc_add local boot
 
 # we still need to add acpid, sshd, and the like and add
