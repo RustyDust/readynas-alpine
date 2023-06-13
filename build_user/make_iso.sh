@@ -76,6 +76,8 @@ profile_$PROFILENAME() {
                 done
         done
         apks="\$apks linux-firmware"
+        apks="\${apks//network-extras }"
+        apks="\${apks//openntpd }"
         apks="\${apks//tiny-cloud-alpine }"
         apks="\${apks//iw }"
         apks="\${apks//wpa_supplicant }"
