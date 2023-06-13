@@ -380,6 +380,9 @@ else
   rc-update del avahi-daemon || true
 fi
 
+# force ssh running
+rc-update add ssh default
+
 # make damn sure we run on first boot after alpine install
 rc-update add local boot
 
@@ -452,6 +455,13 @@ fi
 # --------------------------------------------------------
 # remove quit from kernel command line, try to force video
 sed -i -e "s/quiet/video=1280x1024@60/g" /mnt/boot/extlinux.conf
+
+# --------------------------------------------------------
+# allow root login with password
+SSHPW=`grep "^PermitRootLogin yes" /mnt/etc/ssh/sshd_config`
+if test -z "${SSHPW}"; then
+  sed -i -e 's/\(#PermitRootLogin.*\)/\1\nPermitRootLogin yes/g' /mnt/etc/ssh/sshd_config
+fi
 
 # =========================================================
 # 
