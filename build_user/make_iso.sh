@@ -72,6 +72,8 @@ profile_$PROFILENAME() {
                 done
         done
         apks="\$apks linux-firmware"
+        echo "APKs baked into ISO:"
+        echo "\$apks"
         hostname="rnxpine"
         apkovl="genapkovl-${PROFILENAME}.sh"
 }
