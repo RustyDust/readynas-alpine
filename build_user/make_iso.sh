@@ -64,7 +64,7 @@ profile_$PROFILENAME() {
         apks="\$apks vim util-linux curl coreutils nano btrfs-progs mc
                 mdadm nfs-utils dosfstools ntfs-3g
                 samba shadow rsync net-snmp avahi gawk proftpd
-                "
+               "
         local _k _a
         for _k in \$kernel_flavors; do
                 apks="\$apks linux-\$_k"
