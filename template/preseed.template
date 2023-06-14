@@ -86,7 +86,7 @@ apk update
 
 # --------------------------------------------------------
 # Add required packages
-apk add avahi btrfs-progs coreutils curl dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba shadow util-linux
+apk add avahi btrfs-progs coreutils cups cups-filters curl dhcpcd dosfstools gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd rsync samba sane sane-backends shadow util-linux
 
 modprobe btrfs
 modprobe raid0
@@ -384,6 +384,10 @@ if test "${AVAHI}" = "1"; then
 else
   rc-update del avahi-daemon || true
 fi
+
+# let's start cups and have it listen on all ports
+sed -e 's/^Listen localhost:631/Listen 631/g' /etc/cups/cupsd.conf
+rc-update add cupds default
 
 # force ssh running
 rc-update add ssh default

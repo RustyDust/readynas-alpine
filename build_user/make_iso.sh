@@ -51,12 +51,15 @@ else
   git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
 fi
 
-GITREV=`git rev-parse --short=6 HEAD`
-GITTAG=`git tag | tail -n1`
-
-if test ! -z "${GITTAG}"; then
-  GITREV="${GITTAG}_${GITEREV}"
-fi
+# Find our active branch
+GITBRANCH=`git branch | grep \* | awk '{ print $2 }'
+if test "${GITBRANCH}" != "main"; then
+  GITREV=`git rev-parse --short=6 HEAD`
+  GITREV="dev_${GITREV}"
+else
+  # use the latest tag instead of the commit hash
+  GITREV=`git tag | tail -n1`
+fi 
 
 # We name the profile `preseed` (there's a shocker)
 export PROFILENAME="readynas_${GITREV}"
@@ -71,8 +74,9 @@ profile_$PROFILENAME() {
         syslinux_serial="0 115200"
         # remove packages not needed for conversion
         apks="\$apks vim util-linux curl coreutils nano btrfs-progs mc
-                mdadm nfs-utils dosfstools ntfs-3g
+                mdadm nfs-utils dosfstools ntfs-3g cups cups-filters
                 samba shadow rsync net-snmp avahi gawk proftpd
+                sane sane-backends
                "
         local _k _a
         for _k in \$kernel_flavors; do
