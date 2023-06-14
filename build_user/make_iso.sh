@@ -52,7 +52,7 @@ else
 fi
 
 # Find our active branch
-GITBRANCH=`git branch | grep \* | awk '{ print $2 }'
+GITBRANCH=`git branch | grep \* | awk '{ print $2 }'`
 if test "${GITBRANCH}" != "main"; then
   GITREV=`git rev-parse --short=6 HEAD`
   GITREV="dev_${GITREV}"
