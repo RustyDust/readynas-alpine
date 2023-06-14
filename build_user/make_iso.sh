@@ -52,6 +52,12 @@ else
 fi
 
 GITREV=`git rev-parse --short=6 HEAD`
+GITTAG=`git tag | tail -n1`
+
+if test ! -z "${GITTAG}"; then
+  GITREV="${GITTAG}_${GITEREV}"
+fi
+
 # We name the profile `preseed` (there's a shocker)
 export PROFILENAME="readynas_${GITREV}"
 
