@@ -386,7 +386,21 @@ else
 fi
 
 # let's start cups and have it listen on all ports
-sed -e 's/^Listen localhost:631/Listen 631/g' /etc/cups/cupsd.conf
+# sed -i -e 's/^Listen localhost:631/Listen 631/g' /etc/cups/cupsd.conf
+# sed -i -e 's/^\(IdleExitTimeout.*\)/# \1/g' /etc/cups/cupsd.conf
+# find active interfaces
+CUPSALLOW=
+ETHS=`ifconfig | grep Ethernet | awk '{ print $1 }'`
+ETHS=${ETHS//:}
+for ETHIF in "$ETHS"; do
+  IPADDRS=`ip a s $ETH | grep inet | grep -v 'scope link' | awk '{ print $2 }'`
+  for IPAD in $IPADDRS; do
+    CUPSALLOW="${CUPSALLOW}
+  Allow ${IPAD}"
+  done
+done
+
+sed -e "s/%CUPSALLOW%/${CUPSALLOW}/g" /etc/readynas/cups/cupsd.conf > /etc/cups/cupsd.conf
 rc-update add cupds default
 
 # force ssh running
