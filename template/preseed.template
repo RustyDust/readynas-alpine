@@ -497,5 +497,5 @@ fi
 # This is the end, my friend
 sync
 # !!! HINT !!!
-# comment to prevent automatic reboot after run
-# reboot
+# comment to prevent automatic poweroff after run
+# poweroff
