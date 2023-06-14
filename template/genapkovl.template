@@ -82,6 +82,11 @@ sed -e "s/%KEYMAP%/${KEYMAP:-de}/g" ${MEBUILDROOT}/../template/preseed.template 
 chown root:root $tmp/etc/local.d/preseed.start
 chmod 0755 $tmp/etc/local.d/preseed.start
 
+# =------------------------------------------------------------=
+# some readynas helpers
+mkdir -p "$tmp"/etc/readynas/cups
+cp ${MEBUILDROOT}/../template/cups.conf.template "$tmp"/etc/readynas/cups
+
 rc_add devfs sysinit
 rc_add dmesg sysinit
 rc_add mdev sysinit
