@@ -6,6 +6,11 @@ Creates an ISO image for an automated installer that replaces ReadyNAS OS with
 - preserve all SMB shares
 - migrating user accounts over to alpine
 
+> **Warning**
+> This is work in progress! Expect errors and problems! Notably your ReadyNAS
+> may refuse to boot after running the code. So be prepared to have to do some
+> restore work.
+
 ## Prerequisites
 
 - ReadyNAS running ReadyNAS OS 6.x
