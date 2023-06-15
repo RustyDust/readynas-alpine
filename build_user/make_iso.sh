@@ -41,6 +41,13 @@ fi
 # remove wireless-regdb 
 sed -i -e 's/wireless-regdb//g' aports/scripts/mkimg.base.sh
 
+# make the iso more chatty
+sed -i -e 's/quiet/video=640x480@60/g' aports/scripts/mkimg.base.sh
+sed -i -e 's/quiet/video=640x480@60/g' aports/scripts/mkimg.standard.sh
+
+# enable serial console
+sed -e 's/\(esac\)/\t*)\n\t\t\tkernel_cmdline="console=tty0 console=ttyS0,115200"\n\t\t\t;;\n\t\1/' mkimg.standard.sh
+
 # Shallow clone aports (to get the scripts)
 if test -d aports/.git; then
   cd aports
@@ -62,6 +69,7 @@ else
 fi 
 
 # We name the profile `preseed` (there's a shocker)
+rm -f ${MEDIR}/aports/scripts/*readynas*
 export PROFILENAME="readynas_${GITREV}"
 
 # Basic profile data -- inherits from standard, but the main thing to make
@@ -131,7 +139,7 @@ export TMPDIR=${MEDIR}/iso_tmp
 cd ${MEDIR}/aports/scripts/
 export MEBUILDROOT=${MEDIR}
 
-sh mkimage.sh --tag v3.18-rnx \
+sh mkimage.sh --tag v3.18 \
  --outdir ${MEDIR}/iso \
  --arch x86_64 \
  --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/main \
