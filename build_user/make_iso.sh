@@ -42,12 +42,14 @@ fi
 sed -i -e 's/wireless-regdb//g' aports/scripts/mkimg.base.sh
 
 # make the iso more chatty
-sed -i -e 's/quiet/video=640x480@60/g' aports/scripts/mkimg.base.sh
-sed -i -e 's/quiet/video=640x480@60/g' aports/scripts/mkimg.standard.sh
+sed -i -e 's/ quiet/ video=800x600@60/g' aports/scripts/mkimg.base.sh
+sed -i -e 's/ quiet/ video=800x600@60/g' aports/scripts/mkimg.standard.sh
 
 # enable serial console
-sed -e 's/\(esac\)/\t*)\n\t\t\tkernel_cmdline="console=tty0 console=ttyS0,115200"\n\t\t\t;;\n\t\1/' mkimg.standard.sh
-
+if test ! -f aports/scripts/serial_console; then
+  sed -i 's/\(esac\)/\t*)\n\t\t\tkernel_cmdline="console=tty0 console=ttyS0,115200"\n\t\t\t;;\n\t\1/' aports/scripts/mkimg.standard.sh
+  touch aports/scripts/serial_console
+fi
 # Shallow clone aports (to get the scripts)
 if test -d aports/.git; then
   cd aports
