@@ -390,11 +390,11 @@ fi
 # sed -i -e 's/^\(IdleExitTimeout.*\)/# \1/g' /etc/cups/cupsd.conf
 # find active interfaces
 CUPSALLOW=
-ETHS=`ifconfig | grep Ethernet | awk '{ print $1 }'`
+ETHS="`ifconfig | grep Ethernet | awk '{ print $1 }'`"
 ETHS=${ETHS//:}
 for ETH in "$ETHS"; do
-  IPADDRS=`ip a s $ETH | grep inet | grep -v 'scope link' | awk '{ print $2 }'`
-  for IPAD in $IPADDRS; do
+  IPADDRS="`ip a s $ETH | grep inet | grep -v 'scope link' | awk '{ print $2 }'`"
+  for IPAD in "${IPADDRS}"; do
     CUPSALLOW="${CUPSALLOW}\nAllow ${IPAD}"
   done
 done
