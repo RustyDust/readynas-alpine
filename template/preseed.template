@@ -500,4 +500,4 @@ fi
 sync
 # !!! HINT !!!
 # comment to prevent automatic poweroff after run
-# poweroff
+%LASTRNCMD%

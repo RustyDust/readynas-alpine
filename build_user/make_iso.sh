@@ -63,11 +63,14 @@ fi
 # Find our active branch
 GITBRANCH=`git branch | grep \* | awk '{ print $2 }'`
 if test "${GITBRANCH}" != "main"; then
+  export LASTRNCMD="poweroff"
   GITREV=`git rev-parse --short=6 HEAD`
   GITREV="dev_${GITREV}"
 else
   # use the latest tag instead of the commit hash
   GITREV=`git tag | tail -n1`
+  # don't poweroff the dev versions
+  export LASTRNCMD=""
 fi 
 
 # We name the profile `preseed` (there's a shocker)

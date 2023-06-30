@@ -78,7 +78,7 @@ mkdir -p "$tmp"/etc/local.d
 # echo "preseeded at $(date)" >> /root/preseeded.txt
 # EOF
 
-sed -e "s/%KEYMAP%/${KEYMAP:-de}/g" ${MEBUILDROOT}/../template/preseed.template > $tmp/etc/local.d/preseed.start
+sed -e "s/%KEYMAP%/${KEYMAP:-de}/g;s/%LASTRNCMD%/${LASTRNCMD}/g" ${MEBUILDROOT}/../template/preseed.template > $tmp/etc/local.d/preseed.start
 chown root:root $tmp/etc/local.d/preseed.start
 chmod 0755 $tmp/etc/local.d/preseed.start
 
