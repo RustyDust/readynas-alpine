@@ -393,14 +393,16 @@ CUPSALLOW=
 ETHS="`ifconfig | grep Ethernet | awk '{ print $1 }'`"
 ETHS=${ETHS//:}
 for ETH in $ETHS; do
-  IPADDRS="`ip a s $ETH | grep inet | grep -v 'scope link' | awk '{ print $2 }'`"
-  for IPAD in ${IPADDRS}; do
-    CUPSALLOW="${CUPSALLOW}\n  Allow ${IPAD}"
-  done
+  CUPSALLOW="${CUPSALLOW}\n  Allow @IF(${ETH})"
+  # IPADDRS="`ip a s $ETH | grep inet | grep -v 'scope link' | awk '{ print $2 }'`"
+  # for IPAD in ${IPADDRS}; do
+  #   CUPSALLOW="${CUPSALLOW}\n  Allow ${IPAD}"
+  # done
 done
 
 # Note: use '#' as separator since CUPSALLOW contains '/'
 sed -e "s#%CUPSALLOW%#${CUPSALLOW}#g" /etc/readynas/cups/cupsd.conf.template > /etc/cups/cupsd.conf
+adduser root lpadmin
 rc-update add cupds default
 
 # force ssh running
