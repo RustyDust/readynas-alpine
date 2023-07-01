@@ -11,7 +11,9 @@ profile_%PROFILENAME%() {
                         apks="\$apks \$_a-\$_k"
                 done
         done
+        # add linux firmware files
         apks="\$apks linux-firmware"
+        # remove stuff we don't want/need on the ReadyNAS
         apks="\${apks//network-extras }"
         apks="\${apks//openntpd }"
         apks="\${apks//tiny-cloud-alpine }"
@@ -22,4 +24,3 @@ profile_%PROFILENAME%() {
         hostname="rnxpine"
         apkovl="genapkovl-%PROFILENAME%.sh"
 }
-EOF

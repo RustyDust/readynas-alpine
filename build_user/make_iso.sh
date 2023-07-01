@@ -89,10 +89,12 @@ export PROFILENAME="rnos6"
 # it work is the `apkovl=`. This is the script that configures most of the
 # iso creation and allows you to control precooked packages and stuff.
 
+# apks to bake into the ISO
 APKS="avahi btrfs-progs coreutils cups cups-filters curl dosfstools
       gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd
       rsync samba sane sane-backends shadow util-linux vim"
 
+# actual generation of the script from template
 sed -e "s/%PROILENAME%/${PROFILENAME}/g;s/%APKS%/${APKS}/g" \
        ../template/mkimage-profile.template > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 
