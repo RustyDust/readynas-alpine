@@ -19,9 +19,6 @@
 #
 # =========================================================
 
-# Set some replacement variables
-export KEYMAP=${1:-de}
-
 # find our current dir
 MEDIR=`pwd`
 
@@ -65,7 +62,7 @@ else
   git clone --depth 1 https://gitlab.alpinelinux.org/alpine/aports.git
 fi
 
-# Find our active branch
+# Find our active branch -> will be the ISO's tag
 GITBRANCH=`git branch | grep \* | awk '{ print $2 }'`
 if test "${GITBRANCH}" != "main"; then
   GITREV=`git rev-parse --short=6 HEAD`
@@ -78,9 +75,7 @@ else
   export LASTRNCMD="poweroff"
 fi 
 
-# We name the profile `preseed` (there's a shocker)
-rm -f ${MEDIR}/aports/scripts/*readynas*
-export PROFILENAME="readynas_${GITREV}"
+rm -f ${MEDIR}/aports/scripts/*rnos*
 
 # Basic profile data -- inherits from standard, but the main thing to make
 # it work is the `apkovl=`. This is the script that configures most of the
@@ -149,9 +144,17 @@ export TMPDIR=${MEDIR}/iso_tmp
 cd ${MEDIR}/aports/scripts/
 export MEBUILDROOT=${MEDIR}
 
-sh mkimage.sh --tag v3.18 \
- --outdir ${MEDIR}/iso \
- --arch x86_64 \
- --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/main \
- --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/community \
- --profile $PROFILENAME
+# build different isos for different Keymaps
+
+KEYMAPS="de us"
+for MAP in ${KEYMAPS}; do
+  export KEYMAP=${MAP}
+  export PROFILENAME="rnos6_${KEYMAP}"
+
+  sh mkimage.sh --tag ${GITREV} \
+    --outdir ${MEDIR}/iso \
+    --arch x86_64 \
+    --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/main \
+    --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/community \
+    --profile $PROFILENAME
+done
