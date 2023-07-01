@@ -21,7 +21,7 @@
 
 # find our current dir
 MEDIR=`pwd`
-
+export MEBUILDROOT=${MEDIR}
 
 # Create local RSA signing key (which is IMO useless in this case, but WTHDIK)
 if test ! -f ~/.abuild/abuild.conf; then
@@ -75,11 +75,19 @@ else
   export LASTRNCMD="poweroff"
 fi 
 
+# remove old scripts 
 rm -f ${MEDIR}/aports/scripts/*rnos*
+
+# Create output dir
+mkdir -p ${MEDIR}/iso
+rm -rf ${MEDIR}/iso/*
+
+export PROFILENAME="rnos6"
 
 # Basic profile data -- inherits from standard, but the main thing to make
 # it work is the `apkovl=`. This is the script that configures most of the
 # iso creation and allows you to control precooked packages and stuff.
+
 cat << EOF > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 profile_$PROFILENAME() {
         profile_standard
@@ -90,7 +98,7 @@ profile_$PROFILENAME() {
                 mdadm nfs-utils dosfstools ntfs-3g cups cups-filters
                 samba shadow rsync net-snmp avahi gawk proftpd
                 sane sane-backends
-               "
+             "
         local _k _a
         for _k in \$kernel_flavors; do
                 apks="\$apks linux-\$_k"
@@ -110,6 +118,7 @@ profile_$PROFILENAME() {
         apkovl="genapkovl-${PROFILENAME}.sh"
 }
 EOF
+
 chmod +x ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 
 # This is the script that will generate an `$HOSTNAME.apkovl.tar.gz` that
@@ -125,33 +134,24 @@ chmod +x ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 echo "generating ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh"
 cat ../template/genapkovl.template > ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
 chmod +x ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
-
-# Create output dir
-mkdir -p ${MEDIR}/iso
-rm -rf ${MEDIR}/iso/*
-
 # Make sure we're NOT working in RAM since we may be
 # running on a RAM-challenged system. If you have plenty
 # of RAM (> 4GB) comment the next two lines to speed
 # up the build process
 mkdir -p ${MEDIR}/iso_tmp
 export TMPDIR=${MEDIR}/iso_tmp
-
 # Pat-a-cake, pat-a-cake, mkimage man,
 # Bake me an iso, as fast as you can;
 # Fetch stuff, and mold it, and augment it with preseed,
 # Put it in the ~/iso folder, for I have that need.
 cd ${MEDIR}/aports/scripts/
-export MEBUILDROOT=${MEDIR}
-
 # build different isos for different Keymaps
 
 KEYMAPS="de us"
 for MAP in ${KEYMAPS}; do
   export KEYMAP=${MAP}
-  export PROFILENAME="rnos6_${KEYMAP}"
 
-  sh mkimage.sh --tag ${GITREV} \
+  sh mkimage.sh --tag "${GITREV}_${KEYMAP}" \
     --outdir ${MEDIR}/iso \
     --arch x86_64 \
     --repository http://dl-cdn.alpinelinux.org/alpine/v3.18/main \
