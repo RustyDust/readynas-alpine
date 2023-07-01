@@ -94,10 +94,9 @@ profile_$PROFILENAME() {
         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
         syslinux_serial="0 115200"
         # remove packages not needed for conversion
-        apks="\$apks vim util-linux curl coreutils nano btrfs-progs mc
-                mdadm nfs-utils dosfstools ntfs-3g cups cups-filters
-                samba shadow rsync net-snmp avahi gawk proftpd
-                sane sane-backends
+        apks="\$apks avahi btrfs-progs coreutils cups cups-filters curl dosfstools
+              gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd
+              rsync samba sane sane-backends shadow util-linux vim
              "
         local _k _a
         for _k in \$kernel_flavors; do
