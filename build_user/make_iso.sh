@@ -11,6 +11,11 @@
 # determine the setup of the ISO image:
 #
 # KEYMAP        sets the keyboard language for the installed version
+# LASTRNCMD     determines whether to power off the system or stay in a shell
+#               after the conversion is done
+# MEBUILDROOT   the directory we're build in
+# PROFILENAME   name of the profile that is bein built
+# TMPDIR        location of temporary files for ISO creation
 #
 # =========================================================
 
