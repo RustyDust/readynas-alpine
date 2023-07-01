@@ -1,0 +1,25 @@
+profile_%PROFILENAME%() {
+        profile_standard
+        kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
+        syslinux_serial="0 115200"
+        # remove packages not needed for conversion
+        apks="\$apks %APKS%"
+        local _k _a
+        for _k in \$kernel_flavors; do
+                apks="\$apks linux-\$_k"
+                for _a in \$kernel_addons; do
+                        apks="\$apks \$_a-\$_k"
+                done
+        done
+        apks="\$apks linux-firmware"
+        apks="\${apks//network-extras }"
+        apks="\${apks//openntpd }"
+        apks="\${apks//tiny-cloud-alpine }"
+        apks="\${apks//iw }"
+        apks="\${apks//wpa_supplicant }"
+        echo "APKs baked into ISO:"
+        echo "\$apks"
+        hostname="rnxpine"
+        apkovl="genapkovl-%PROFILENAME%.sh"
+}
+EOF

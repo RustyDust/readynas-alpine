@@ -52,6 +52,7 @@ if test ! -f aports/scripts/serial_console; then
   sed -i 's/\(esac\)/\t*)\n\t\t\tkernel_cmdline="console=tty0 console=ttyS0,115200"\n\t\t\t;;\n\t\1/' aports/scripts/mkimg.standard.sh
   touch aports/scripts/serial_console
 fi
+
 # Shallow clone aports (to get the scripts)
 if test -d aports/.git; then
   cd aports
@@ -88,35 +89,42 @@ export PROFILENAME="rnos6"
 # it work is the `apkovl=`. This is the script that configures most of the
 # iso creation and allows you to control precooked packages and stuff.
 
-cat << EOF > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
-profile_$PROFILENAME() {
-        profile_standard
-        kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
-        syslinux_serial="0 115200"
-        # remove packages not needed for conversion
-        apks="\$apks avahi btrfs-progs coreutils cups cups-filters curl dosfstools
-              gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd
-              rsync samba sane sane-backends shadow util-linux vim
-             "
-        local _k _a
-        for _k in \$kernel_flavors; do
-                apks="\$apks linux-\$_k"
-                for _a in \$kernel_addons; do
-                        apks="\$apks \$_a-\$_k"
-                done
-        done
-        apks="\$apks linux-firmware"
-        apks="\${apks//network-extras }"
-        apks="\${apks//openntpd }"
-        apks="\${apks//tiny-cloud-alpine }"
-        apks="\${apks//iw }"
-        apks="\${apks//wpa_supplicant }"
-        echo "APKs baked into ISO:"
-        echo "\$apks"
-        hostname="rnxpine"
-        apkovl="genapkovl-${PROFILENAME}.sh"
-}
-EOF
+APKS="avahi btrfs-progs coreutils cups cups-filters curl dosfstools
+      gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd
+      rsync samba sane sane-backends shadow util-linux vim"
+
+sed -e "s/%PROILENAME%/${PROFILENAME}/g;s/%APKS%/${APKS}/g" \
+       ../template/mkimage-profile.template > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
+
+# cat << EOF > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
+# profile_$PROFILENAME() {
+#         profile_standard
+#         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
+#         syslinux_serial="0 115200"
+#         # remove packages not needed for conversion
+#         apks="\$apks avahi btrfs-progs coreutils cups cups-filters curl dosfstools
+#               gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd
+#               rsync samba sane sane-backends shadow util-linux vim
+#              "
+#         local _k _a
+#         for _k in \$kernel_flavors; do
+#                 apks="\$apks linux-\$_k"
+#                 for _a in \$kernel_addons; do
+#                         apks="\$apks \$_a-\$_k"
+#                 done
+#         done
+#         apks="\$apks linux-firmware"
+#         apks="\${apks//network-extras }"
+#         apks="\${apks//openntpd }"
+#         apks="\${apks//tiny-cloud-alpine }"
+#         apks="\${apks//iw }"
+#         apks="\${apks//wpa_supplicant }"
+#         echo "APKs baked into ISO:"
+#         echo "\$apks"
+#         hostname="rnxpine"
+#         apkovl="genapkovl-${PROFILENAME}.sh"
+# }
+# EOF
 
 chmod +x ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 
@@ -124,28 +132,26 @@ chmod +x ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 # will get baked into the `*.iso`. You could say this is the good stuff.
 #
 # And most of it is stolen^Wcopied from: scripts/genapkovl-dhcp.sh
-#
-# Notice:
-# I'm setting up DHCP networking and `/etc/local.d/${PROFILENAME}.start`
-# as the main course. But I'm skimping on the loaded packages. You might
-# not want that.
-#
+
 echo "generating ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh"
 cat ../template/genapkovl.template > ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
 chmod +x ${MEDIR}/aports/scripts/genapkovl-${PROFILENAME}.sh
+
 # Make sure we're NOT working in RAM since we may be
 # running on a RAM-challenged system. If you have plenty
 # of RAM (> 4GB) comment the next two lines to speed
 # up the build process
+
 mkdir -p ${MEDIR}/iso_tmp
 export TMPDIR=${MEDIR}/iso_tmp
+
 # Pat-a-cake, pat-a-cake, mkimage man,
 # Bake me an iso, as fast as you can;
 # Fetch stuff, and mold it, and augment it with preseed,
 # Put it in the ~/iso folder, for I have that need.
 cd ${MEDIR}/aports/scripts/
-# build different isos for different Keymaps
 
+# build different isos for different Keymaps
 KEYMAPS="de us"
 for MAP in ${KEYMAPS}; do
   export KEYMAP=${MAP}
