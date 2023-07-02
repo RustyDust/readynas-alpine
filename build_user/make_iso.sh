@@ -41,11 +41,11 @@ else
 fi
 
 # remove wireless-regdb 
-sed -i -e 's/wireless-regdb//g' aports/scripts/mkimg.base.sh
+sed -i 's/wireless-regdb//g' aports/scripts/mkimg.base.sh
 
 # make the iso more chatty
-sed -i -e 's/ quiet/ video=800x600@60/g' aports/scripts/mkimg.base.sh
-sed -i -e 's/ quiet/ video=800x600@60/g' aports/scripts/mkimg.standard.sh
+sed -i 's/ quiet/ video=800x600@60/g' aports/scripts/mkimg.base.sh
+sed -i 's/ quiet/ video=800x600@60/g' aports/scripts/mkimg.standard.sh
 
 # enable serial console
 if test ! -f aports/scripts/serial_console; then
@@ -97,37 +97,6 @@ APKS="${APKS} rsync samba sane sane-backends shadow util-linux vim"
 # actual generation of the script from template
 sed -e "s/%PROFILENAME%/${PROFILENAME}/g;s/%APKS%/${APKS}/g" \
   ../template/mkimage-profile.template > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
-
-# cat << EOF > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
-# profile_$PROFILENAME() {
-#         profile_standard
-#         kernel_cmdline="unionfs_size=512M console=tty0 console=ttyS0,115200"
-#         syslinux_serial="0 115200"
-#         # remove packages not needed for conversion
-#         apks="\$apks avahi btrfs-progs coreutils cups cups-filters curl dosfstools
-#               gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd
-#               rsync samba sane sane-backends shadow util-linux vim
-#              "
-#         local _k _a
-#         for _k in \$kernel_flavors; do
-#                 apks="\$apks linux-\$_k"
-#                 for _a in \$kernel_addons; do
-#                         apks="\$apks \$_a-\$_k"
-#                 done
-#         done
-#         apks="\$apks linux-firmware"
-#         apks="\${apks//network-extras }"
-#         apks="\${apks//openntpd }"
-#         apks="\${apks//tiny-cloud-alpine }"
-#         apks="\${apks//iw }"
-#         apks="\${apks//wpa_supplicant }"
-#         echo "APKs baked into ISO:"
-#         echo "\$apks"
-#         hostname="rnxpine"
-#         apkovl="genapkovl-${PROFILENAME}.sh"
-# }
-# EOF
-
 chmod +x ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 
 # This is the script that will generate an `$HOSTNAME.apkovl.tar.gz` that

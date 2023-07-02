@@ -25,7 +25,7 @@ and burn it on an USB stick. I currently use [Balena Etcher](https://etcher.bale
 but you may prefer other methods.
 
 Next, follow the procedure to boot your ReadyNAS from that stick as
-outlined in [NETGEAR Support: How do I use the USB Recovery Tool on my ReadyNAS OS 6 storage system?](https://kb.netgear.com/29952/How-do-I-use-the-USB-Recovery-Tool-on-my-ReadyNAS-OS-6-storage-system#Desktop_ReadyNAS).
+outlined in [NETGEAR Support: How do I use the USB Recovery Tool on my ReadyNAS OS 6 storage system?](USBRecovery.md).
 
 If all goes well the ReadyNAS will boot from the USB stick, the converter will do its thing and when
 it's done it will finish the conversion with a reboot. You then have an converted ReadyNAS that
@@ -68,7 +68,7 @@ it's done it will finish the conversion with a reboot. You then have an converte
    Either way, s ince the passwords aren't transferred _**users must login once using ssh to set an
    individual password**_.
 
-1) No web interface
+1) **No web interface (yet?)**
 
    The converted system will only provide the raw services like SMB, ssh, FTP and the like but no
    web based interface to manage those. Might come later as a Golang tool or whatever. I don't know yet.
