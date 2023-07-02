@@ -95,8 +95,7 @@ APKS="avahi btrfs-progs coreutils cups cups-filters curl dosfstools
       rsync samba sane sane-backends shadow util-linux vim"
 
 # actual generation of the script from template
-sed -e "s/%PROILENAME%/${PROFILENAME}/g;s/%APKS%/${APKS}/g" \
-       ../template/mkimage-profile.template > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
+sed -e "s/%PROILENAME%/${PROFILENAME}/g;s/%APKS%/${APKS}/g" ../template/mkimage-profile.template > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 
 # cat << EOF > ${MEDIR}/aports/scripts/mkimg.$PROFILENAME.sh
 # profile_$PROFILENAME() {
