@@ -91,7 +91,7 @@ export PROFILENAME="rnos6"
 
 # apks to bake into the ISO
 APKS="avahi btrfs-progs coreutils cups cups-filters curl dosfstools epson-inkjet-printer-escpr"
-APKS="${APKS} gawk hplip mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd"
+APKS="${APKS} gawk mc mdadm nano net-snmp nfs-utils ntfs-3g proftpd"
 APKS="${APKS} rsync samba sane sane-backends shadow util-linux vim"
 
 # actual generation of the script from template
