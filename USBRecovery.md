@@ -8,12 +8,12 @@ If a firmware upgrade fails, your ReadyNAS storage system might be unable to
 boot. You can use the USB Recovery Tool to reload current firmware onto your 
 ReadyNAS storage system for recovery purposes only.
 
-**Warning**
-
-**If you use the USB Recovery Tool incorrectly or if you attempt to use the USB
-Recovery Tool to downgrade to an older firmware version, you might cause 
-permanent damage to your ReadyNAS system. Only use the USB Recovery Tool when
-NETGEAR Technical Support recommends it.**
+> **Warning**
+>
+> **If you use the USB Recovery Tool incorrectly or if you attempt to use the USB
+> Recovery Tool to downgrade to an older firmware version, you might cause 
+> permanent damage to your ReadyNAS system. Only use the USB Recovery Tool when
+> NETGEAR Technical Support recommends it.**
 
 Generally, firmware upgrade failure happens because the new ReadyNAS firmware
 was not fully written to your ReadyNAS system due to something unexpected 
@@ -25,11 +25,11 @@ The USB Recovery Tool only works on Windows PCs, but if you need to manually
 create a recovery USB drive on an ARM-based computer system, jump to 
 [To create a USB recovery drive for an ARM-based ReadyNAS system](#to-create-a-usb-recovery-drive-for-an-arm-based-system).
 
-**Note** 
-
-Manually created USB recovery drives only work on ARM-based ReadyNAS systems.
-If you need to perform USB recovery on an x86 ReadyNAS system, you must use the
-USB Recovery Tool.
+> **Note** 
+> 
+> Manually created USB recovery drives only work on ARM-based ReadyNAS systems.
+> If you need to perform USB recovery on an x86 ReadyNAS system, you must use the
+> USB Recovery Tool.
 
 ## Warnings
 
