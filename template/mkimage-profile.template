@@ -14,11 +14,11 @@ profile_%PROFILENAME%() {
         # add linux firmware files
         apks="\$apks linux-firmware"
         # remove stuff we don't want/need on the ReadyNAS
-        apks="\${apks//network-extras }"
-        apks="\${apks//openntpd }"
-        apks="\${apks//tiny-cloud-alpine }"
+        apks="\${apks//network-extras}"
+        apks="\${apks//openntpd}"
+        apks="\${apks//tiny-cloud-alpine}"
         apks="\${apks//iw }"
-        apks="\${apks//wpa_supplicant }"
+        apks="\${apks//wpa_supplicant}"
         echo "APKs baked into ISO:"
         echo "\$apks"
         hostname="rnxpine"
