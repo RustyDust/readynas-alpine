@@ -72,7 +72,7 @@ if test "${GITBRANCH}" != "main"; then
   export LASTRNCMD=""
 else
   # use the latest tag instead of the commit hash
-  GITREV=`git tag | tail -n1 | tr '.' '_'`
+  GITREV=`git tag | tail -n1`
   export LASTRNCMD="poweroff"
 fi 
 
