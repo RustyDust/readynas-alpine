@@ -69,6 +69,10 @@ if test -f /boot/.readynas_converted; then
 
   # finally delete ourselves
   rm -f /etc/local.d/preseed.start
+
+  # and update from package repository
+  apk upgrade
+
   exit
 fi
 
