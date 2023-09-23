@@ -1,5 +1,8 @@
 # RNX-Alpine
 
+> **Note**
+> Currently this only works for x86 based ReadyNAS systems!
+
 Creates an ISO image for an automated installer that replaces ReadyNAS OS with 
 [Alpine Linux](https://alpinelinux.org) while at the same time
 - leaving the data intact
@@ -13,7 +16,7 @@ Creates an ISO image for an automated installer that replaces ReadyNAS OS with
 
 ## Prerequisites
 
-- ReadyNAS running ReadyNAS OS 6.x
+- x86 based ReadyNAS running ReadyNAS OS 6.x
 - USB drive with at least 2GB of storage space
 - working internet connection
 - _curious and adventurous mindset highly recommended_
