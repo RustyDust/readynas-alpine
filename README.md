@@ -21,6 +21,8 @@ Creates an ISO image for an automated installer that replaces ReadyNAS OS with
 - working internet connection
 - _curious and adventurous mindset highly recommended_
 
+If booting from the USB stick during the following steps does not work, try a different (read 'older') one. Try to avoid using USB3 sticks to begin with as they will likely fail.
+
 ## Quick Start / Usage
 
 If you want to jump right into the fry just grab the latest ISO image from [Releases](./releases),
