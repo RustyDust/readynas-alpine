@@ -465,7 +465,7 @@ for ADD in ${ADDMNT}; do
 done
 
 echo "/dev/cdrom    /media/cdrom    iso9660 noauto,ro     0   0" >> /mnt/etc/fstab
-echo "/dev/usbdisk  /media/cdrom    vfat    noauto        0   0" >> /mnt/etc/fstab
+# echo "/dev/usbdisk  /media/cdrom    vfat    noauto        0   0" >> /mnt/etc/fstab
 echo "tmpfs         /tmp            tmpfs   nosuid,nodev  0   0" >> /mnt/etc/fstab
 
 # --------------------------------------------------------
